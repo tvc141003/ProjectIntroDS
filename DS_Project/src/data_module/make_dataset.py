@@ -235,31 +235,6 @@ def processInfoFromUrl(elems: Dict[str, List[str]]) -> Dict[str, List[str]]:
     return result
 
 
-
-def collectData(urls, driver):
-    fields = ['name', 'description', 'designer', 'artist', 'publisher', 'min_players', 'max_players', 
-              'min_playtime', 'max_playtime', 'playing_time', 'min_age', 'complexity_rating', 'user_ratings', 'user_comments', 
-              'type', 'category', 'mechanism', 'family', 'year', 'average_rating']
-    
-    data = {field: [] for field in fields}
-    missing_urls = []
-    
-    for url in urls:
-        try:
-            driver.get(url)
-            elems = extractInfoFromUrl(driver)
-            result = processInfoFromUrl(elems)
-            for field in fields:
-                data[field].append(result[field])
-            
-        except:
-            missing_urls.append(url)
-            print(f"Error processing URL: {url}, skipping...")
-    
-    print(f"Missing {len(missing_urls)} URLs")
-    return data
-
-
 def process_url(url, chrome_options):
     try:
         with Chrome(options=chrome_options) as driver:
