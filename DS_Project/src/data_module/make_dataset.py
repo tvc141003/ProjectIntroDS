@@ -2,12 +2,10 @@ import subprocess
 import requests
 import numpy as np
 import pandas as pd
-from typing import List
+from typing import List, Dict
 from bs4 import BeautifulSoup
 
-from typing import List, Dict
-import os
-import re
+from selenium import webdriver
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -15,8 +13,8 @@ from selenium.webdriver.common.by import By
 
 import concurrent.futures
 
-import os
-import pandas as pd
+import os, re
+import time
 
 # Kiểm tra robots.txt để xác định xem có cho phép thu thập dữ liệu hay không.
 import urllib.robotparser
@@ -68,11 +66,6 @@ def saveCSV2DataFrame(url: str, sep: str = ',', encoding: str = 'utf-8') -> pd.D
         raise FileNotFoundError
         # return None
     return df
-
-
-
-
-
 
 def getUrls(url: str, max_range: int) -> List[str]:
     """Hàm lấy danh sách url từ sitemap
@@ -266,26 +259,25 @@ def collect_data(urls, chrome_options):
 
     return data
 
-import time
 
-def main():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
+# def main():
+#     chrome_options = Options()
+#     chrome_options.add_argument("--headless")
 
-    for i in range(1, 2):
-        boardgame_urls = readListFromFile(f'./data/external/boardgame_urls/boardgame_urls_page_{i}.txt')
-        start_time = time.time()
-        data = collect_data(boardgame_urls, chrome_options)
-        elapsed_time = time.time() - start_time
+#     for i in range(5, 17):
+#         boardgame_urls = readListFromFile(f'./data/external/boardgame_urls/boardgame_urls_page_{i}.txt')
+#         start_time = time.time()
+#         data = collect_data(boardgame_urls, chrome_options)
+#         elapsed_time = time.time() - start_time
 
-        pd.DataFrame(data).to_csv(f'./data/raw/raw_data_page_{i}.csv', index=False)
+#         pd.DataFrame(data).to_csv(f'./data/raw/raw_data_page_{i}.csv', index=False)
 
-        print(f"Elapsed time: {elapsed_time} seconds")
+#         print(f"Elapsed time: {elapsed_time} seconds")
 
-    print("Done!")
+#     print("Done!")
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
                        
     # sitemap_url = 'https://boardgamegeek.com/sitemapindex'
     # page_urls = getUrls(sitemap_url, 16)
